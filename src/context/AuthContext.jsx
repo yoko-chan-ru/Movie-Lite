@@ -1,12 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut,
-  onAuthStateChanged 
-} from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
+    onAuthStateChanged } from 'firebase/auth'
 import { doc, setDoc, getDoc } from 'firebase/firestore'
-import { auth, db } from '../services/firebase.js'
+import { auth, db } from '../services/firebase'
 
 const AuthContext = createContext()
 
@@ -43,7 +39,7 @@ export function AuthProvider({ children }) {
   const register = async (email, password, name) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const firebaseUser = userCredential.user;
+      const firebaseUser = userCredential.user
 
       await setDoc(doc(db, 'users', firebaseUser.uid), {
         name,
@@ -59,7 +55,7 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password)
       return { success: true }
     } catch (error) {
       throw new Error(error.message)
@@ -75,32 +71,6 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const addMovie = async (movie) => {
-  if (!user) {
-    alert('Войдите, чтобы добавить фильм')
-    return
-  }
-
-  const exists = user.movies.some(m => m.imdbID === movie.imdbID)
-  if (exists) {
-    alert('Этот фильм уже в вашем списке')
-    return
-  }
-
-  const updatedMovies = [...user.movies, {
-    imdbID: movie.imdbID,
-    Title: movie.Title,
-    Year: movie.Year,
-    Poster: movie.Poster,
-    status: 'wishlist',
-    userRating: null,
-    notes: '',
-    addedAt: new Date().toISOString()
-  }]
-
-  await updateUser({ movies: updatedMovies })
-}
-
   const updateUser = async (updatedData) => {
     if (!user) return
     try {
@@ -111,8 +81,42 @@ export function AuthProvider({ children }) {
     }
   }
 
+  const addMovie = async (movie) => {
+    if (!user) {
+      alert('Войдите, чтобы добавить фильм')
+      return
+    }
+
+    const exists = user.movies.some(m => m.imdbID === movie.imdbID);
+    if (exists) {
+      alert('Этот фильм уже в вашем списке')
+      return
+    }
+
+    const updatedMovies = [...user.movies, {
+      imdbID: movie.imdbID,
+      Title: movie.Title,
+      Year: movie.Year,
+      Poster: movie.Poster,
+      status: 'wishlist',
+      userRating: null,
+      notes: '',
+      addedAt: new Date().toISOString()
+    }]
+
+    await updateUser({ movies: updatedMovies })
+  }
+
+  const removeMovie = async (imdbID) => {
+    if (!user) return
+
+    const updatedMovies = user.movies.filter(movie => movie.imdbID !== imdbID)
+    await updateUser({ movies: updatedMovies })
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, logout, updateUser, addMovie }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout, updateUser,
+        addMovie,removeMovie}}>
       {children}
     </AuthContext.Provider>
   )

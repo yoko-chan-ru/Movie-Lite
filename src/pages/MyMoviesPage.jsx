@@ -1,7 +1,7 @@
 import { useAuth } from '../context/AuthContext'
 
 function MyMoviesPage() {
-  const { user } = useAuth()
+  const { user, removeMovie } = useAuth()
 
   if (!user) return <p>Войдите, чтобы увидеть свои фильмы</p>
   if (!user.movies || user.movies.length === 0) {
@@ -18,6 +18,8 @@ function MyMoviesPage() {
             <img src={movie.Poster} alt={movie.Title} width="100" />
           )}
           <p>Статус: {movie.status}</p>
+          <button onClick={() => removeMovie(movie.imdbID)}>Удалить</button>
+          <hr />
         </div>
       ))}
     </div>
