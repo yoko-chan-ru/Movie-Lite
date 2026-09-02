@@ -136,9 +136,21 @@ export function AuthProvider({ children }) {
     await updateUser({ movies: updatedMovies })
     }
 
+  const updateMovieNotes = async (imdbID, notes) => {
+    if (!user) return;
+
+    const updatedMovies = user.movies.map(movie =>
+        movie.imdbID === imdbID 
+        ? { ...movie, notes }
+        : movie
+    )
+
+    await updateUser({ movies: updatedMovies })
+    }
+
   return (
     <AuthContext.Provider value={{ user, loading, register, login, logout, updateUser,
-        addMovie, removeMovie, updateMovieStatus, updateMovieRating}}>
+        addMovie, removeMovie, updateMovieStatus, updateMovieRating, updateMovieNotes}}>
       {children}
     </AuthContext.Provider>
   )

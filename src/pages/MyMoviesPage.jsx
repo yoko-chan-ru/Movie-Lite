@@ -1,17 +1,38 @@
 import { useAuth } from '../context/AuthContext'
+import { useState } from 'react';
 
 function MyMoviesPage() {
-  const { user, removeMovie, updateMovieStatus, updateMovieRating} = useAuth()
+  const { user, removeMovie, updateMovieStatus, updateMovieRating, 
+    updateMovieNotes } = useAuth()
+
+  const [localNotes, setLocalNotes] = useState({})
 
   if (!user) return <p>Войдите, чтобы увидеть свои фильмы</p>
   if (!user.movies || user.movies.length === 0) {
     return <p>У вас пока нет фильмов. Добавьте их через поиск!</p>
   }
 
+  const handleNoteChange = (imdbID, value) => {
+    setLocalNotes(prev => ({ ...prev, [imdbID]: value }))
+  }
+
+  const handleNoteBlur = (imdbID) => {
+    const note = localNotes[imdbID]
+    if (note !== undefined) {
+      updateMovieNotes(imdbID, note)
+    }
+  }
+
   return (
     <div>
-      <h2>Мои фильмы</h2>
-      {user.movies.map((movie) => (
+      <h2>Мои фильмы и сериалы</h2>
+      {user.movies.map((movie) => {
+        const currentNote = localNotes[movie.imdbID] !== undefined 
+          ? localNotes[movie.imdbID] 
+          : (movie.notes || '')
+
+
+    return (
         <div key={movie.imdbID}>
           <h4>{movie.Title} ({movie.Year})</h4>
           {movie.Poster && movie.Poster !== 'N/A' && (
@@ -48,9 +69,23 @@ function MyMoviesPage() {
           </div>
 
           <button onClick={() => removeMovie(movie.imdbID)}>Удалить</button>
+
+          <div>
+              <label>Мои заметки: </label>
+              <textarea
+                value={currentNote}
+                onChange={(e) => handleNoteChange(movie.imdbID, e.target.value)}
+                onBlur={() => handleNoteBlur(movie.imdbID)}
+                placeholder="Что думаешь о фильме?"
+                rows="2"
+                cols="30"
+              />
+            </div>
+
           <hr />
         </div>
-      ))}
+        )
+    })}
     </div>
   )
 }
