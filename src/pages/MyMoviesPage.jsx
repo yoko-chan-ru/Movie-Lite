@@ -1,7 +1,7 @@
 import { useAuth } from '../context/AuthContext'
 
 function MyMoviesPage() {
-  const { user, removeMovie } = useAuth()
+  const { user, removeMovie, updateMovieStatus} = useAuth()
 
   if (!user) return <p>Войдите, чтобы увидеть свои фильмы</p>
   if (!user.movies || user.movies.length === 0) {
@@ -17,7 +17,16 @@ function MyMoviesPage() {
           {movie.Poster && movie.Poster !== 'N/A' && (
             <img src={movie.Poster} alt={movie.Title} width="100" />
           )}
-          <p>Статус: {movie.status}</p>
+
+          <select
+            value={movie.status}
+            onChange={(e) => updateMovieStatus(movie.imdbID, e.target.value)}
+          >
+            <option value="wishlist">Хочу посмотреть</option>
+            <option value="watching">Смотрю</option>
+            <option value="watched">Посмотрено</option>
+          </select>
+
           <button onClick={() => removeMovie(movie.imdbID)}>Удалить</button>
           <hr />
         </div>
