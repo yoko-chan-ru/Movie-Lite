@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useAuth } from '../../context/AuthContext';
 import { searchMovies } from '../../services/omdb'
 
 function MovieSearch() {
