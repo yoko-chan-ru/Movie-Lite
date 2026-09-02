@@ -60,9 +60,9 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      return { success: true };
+      return { success: true }
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error.message)
     }
   }
 
@@ -75,7 +75,32 @@ export function AuthProvider({ children }) {
     }
   }
 
-  
+  const addMovie = async (movie) => {
+  if (!user) {
+    alert('Войдите, чтобы добавить фильм')
+    return
+  }
+
+  const exists = user.movies.some(m => m.imdbID === movie.imdbID)
+  if (exists) {
+    alert('Этот фильм уже в вашем списке')
+    return
+  }
+
+  const updatedMovies = [...user.movies, {
+    imdbID: movie.imdbID,
+    Title: movie.Title,
+    Year: movie.Year,
+    Poster: movie.Poster,
+    status: 'wishlist',
+    userRating: null,
+    notes: '',
+    addedAt: new Date().toISOString()
+  }]
+
+  await updateUser({ movies: updatedMovies })
+}
+
   const updateUser = async (updatedData) => {
     if (!user) return
     try {
@@ -87,10 +112,10 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout, updateUser, addMovie }}>
       {children}
     </AuthContext.Provider>
-  );
+  )
 }
 
 export function useAuth() {

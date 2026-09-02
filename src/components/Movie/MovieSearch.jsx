@@ -5,6 +5,7 @@ function MovieSearch() {
   const [query, setQuery] = useState('')
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(false)
+  const { addMovie } = useAuth()
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -36,6 +37,9 @@ function MovieSearch() {
           {movie.Poster && movie.Poster !== 'N/A' && (
             <img src={movie.Poster} alt={movie.Title} width="100" />
           )}
+          <button onClick={() => addMovie(movie)}>
+            + В список
+          </button>
           <hr />
         </div>
       ))}
