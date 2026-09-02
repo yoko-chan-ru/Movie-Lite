@@ -2,11 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
-
-
-function HomePage() {
-  return <h2>Заглушка</h2>
-}
+import HomePage from './pages/HomePage'
 
 function App() {
   return (

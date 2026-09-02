@@ -66,7 +66,6 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Выход
   const logout = async () => {
     try {
       await signOut(auth)
@@ -74,18 +73,18 @@ export function AuthProvider({ children }) {
     } catch (error) {
       throw new Error(error.message)
     }
-  };
+  }
 
   
   const updateUser = async (updatedData) => {
-    if (!user) return;
+    if (!user) return
     try {
       await setDoc(doc(db, 'users', user.id), updatedData, { merge: true })
       setUser(prev => ({ ...prev, ...updatedData }))
     } catch (error) {
       console.error('Ошибка обновления:', error)
     }
-  };
+  }
 
   return (
     <AuthContext.Provider value={{ user, loading, register, login, logout, updateUser }}>

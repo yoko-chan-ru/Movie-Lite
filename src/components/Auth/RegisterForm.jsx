@@ -3,33 +3,33 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 function RegisterForm() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
-  const navigate = useNavigate();
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const { register } = useAuth()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+    e.preventDefault()
+    setError('')
+    setLoading(true)
 
     try {
-      await register(email, password, name);
-      navigate('/'); // на главную после регистрации
+      await register(email, password, name)
+      navigate('/')
     } catch (err) {
-      setError(err.message);
+      setError(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto' }}>
+    <div>
       <h2>Регистрация</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -37,7 +37,6 @@ function RegisterForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
         />
         <input
           type="email"
@@ -45,7 +44,6 @@ function RegisterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
         />
         <input
           type="password"
@@ -53,14 +51,13 @@ function RegisterForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
         />
-        <button type="submit" disabled={loading} style={{ width: '100%', padding: '10px' }}>
+        <button type="submit" disabled={loading}>
           {loading ? 'Регистрация...' : 'Зарегистрироваться'}
         </button>
       </form>
     </div>
-  );
+  )
 }
 
-export default RegisterForm;
+export default RegisterForm
