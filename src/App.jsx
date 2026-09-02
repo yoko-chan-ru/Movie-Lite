@@ -4,12 +4,14 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import HomePage from './pages/HomePage'
 import MyMoviesPage from './pages/MyMoviesPage'
+import Header from './components/Layout/Header'
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <div>
+          <Header />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/mymovies" element={<MyMoviesPage />} />
