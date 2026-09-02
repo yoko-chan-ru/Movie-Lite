@@ -1,8 +1,18 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
 function Header() {
-  const { user, logout } = useAuth()
+    const { user, logout } = useAuth()
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        try {
+        await logout()
+        navigate('/')
+        } catch (error) {
+        console.error('Ошибка выхода:', error)
+        }
+    }
 
   return (
     <header>
@@ -21,7 +31,7 @@ function Header() {
               Мои фильмы
             </Link>
             <span>{user.name}</span>
-            <button onClick={logout}>
+            <button onClick={handleLogout}>
               Выйти
             </button>
           </>
