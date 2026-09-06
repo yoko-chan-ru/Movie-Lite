@@ -11,6 +11,9 @@ function MyMoviesPage() {
   const [collapsed, setCollapsed] = useState({})
   const [sortBy, setSortBy] = useState({})
   const [globalSort, setGlobalSort] = useState('date')
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const moviesPerPage = 10
 
   if (!user) return <p>Войдите, чтобы увидеть свои фильмы</p>
   if (!user.movies || user.movies.length === 0) {
@@ -51,7 +54,7 @@ function MyMoviesPage() {
               value={groupSort}
               onChange={(e) => setSortBy(prev => ({ ...prev, [status]: e.target.value }))}
               onClick={(e) => e.stopPropagation()}
-              >
+            >
               <option value="date">По дате</option>
               <option value="rating">По оценке</option>
               <option value="year">По году</option>
@@ -84,6 +87,10 @@ function MyMoviesPage() {
 
   const renderListView = () => {
     const sortedMovies = sortMovies(user.movies, globalSort)
+    const totalMovies = sortedMovies.length
+    const totalPages = Math.ceil(totalMovies / moviesPerPage)
+    const startIndex = (currentPage - 1) * moviesPerPage
+    const paginatedMovies = sortedMovies.slice(startIndex, startIndex + moviesPerPage)
 
     return (
       <div>
@@ -91,16 +98,20 @@ function MyMoviesPage() {
           <label>Сортировка: </label>
           <select 
             value={globalSort} 
-            onChange={(e) => setGlobalSort(e.target.value)}
+            onChange={(e) => {
+              setGlobalSort(e.target.value)
+              setCurrentPage(1)
+            }}
           >
             <option value="date">По дате</option>
             <option value="rating">По оценке</option>
             <option value="year">По году</option>
             <option value="title">По алфавиту</option>
           </select>
+          <span> Всего: {totalMovies} </span>
         </div>
 
-        {sortedMovies.map((movie) => (
+        {paginatedMovies.map((movie) => (
           <MovieCard
             key={movie.imdbID}
             movie={movie}
@@ -112,11 +123,37 @@ function MyMoviesPage() {
             onRatingChange={updateMovieRating}
           />
         ))}
+
+        {totalPages > 1 && (
+          <div>
+            <button 
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              ←
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button 
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              →
+            </button>
+          </div>
+        )}
       </div>
     )
   }
 
-      
   return (
     <div>
       <h2>Мои фильмы и сериалы</h2>
