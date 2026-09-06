@@ -14,6 +14,7 @@ function MyMoviesPage() {
   const [sortBy, setSortBy] = useState({})
   const [globalSort, setGlobalSort] = useState('date')
   const [currentPage, setCurrentPage] = useState(1)
+  const [visibleCount, setVisibleCount] = useState({})
 
   const moviesPerPage = 10
 
@@ -37,6 +38,13 @@ function MyMoviesPage() {
     setCollapsed(prev => ({ ...prev, [status]: !prev[status] }))
   }
 
+  const showMore = (status) => {
+  setVisibleCount(prev => ({
+    ...prev,
+    [status]: (prev[status] || 5) + 5
+    }))
+  }
+
   const renderGroupedView = () => {
     return Object.entries(STATUSES).map(([status, { label, icon }]) => {
       const moviesInGroup = user.movies.filter(m => m.status === status)
@@ -44,10 +52,14 @@ function MyMoviesPage() {
 
       const groupSort = sortBy[status] || 'date'
       const sortedMovies = sortMovies(moviesInGroup, groupSort)
+      const visibleMovies = sortedMovies.slice(0, visibleCount[status] || 5)
+      const hasMore = sortedMovies.length > (visibleCount[status] || 5)
+
 
       return (
         <div key={status}>
           <div onClick={() => toggleCollapse(status)}>
+
             <h3>
               <FontAwesomeIcon icon={icon}/>
               {label} ({moviesInGroup.length})
@@ -67,26 +79,34 @@ function MyMoviesPage() {
             <span><FontAwesomeIcon icon={collapsed[status] ? faChevronRight : faChevronDown} /></span>
           </div>
 
-          {!collapsed[status] && (
-            <div>
-              {sortedMovies.map((movie) => (
-                <MovieCard
-                  key={movie.imdbID}
-                  movie={movie}
-                  localNotes={localNotes}
-                  onNoteChange={handleNoteChange}
-                  onNoteBlur={handleNoteBlur}
-                  onRemove={removeMovie}
-                  onStatusChange={updateMovieStatus}
-                  onRatingChange={updateMovieRating}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      )
-    })
-  }
+             {!collapsed[status] && (
+          <div>
+            {visibleMovies.map((movie) => (
+              <MovieCard
+                key={movie.imdbID}
+                movie={movie}
+                localNotes={localNotes}
+                onNoteChange={handleNoteChange}
+                onNoteBlur={handleNoteBlur}
+                onRemove={removeMovie}
+                onStatusChange={updateMovieStatus}
+                onRatingChange={updateMovieRating}
+              />
+            ))}
+
+            {hasMore && (
+              <button 
+                onClick={() => showMore(status)}
+              >
+                Показать ещё ({sortedMovies.length - (visibleCount[status] || 5)})
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    )
+  })
+}
 
   const renderListView = () => {
     const sortedMovies = sortMovies(user.movies, globalSort)
