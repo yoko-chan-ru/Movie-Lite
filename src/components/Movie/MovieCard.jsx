@@ -1,3 +1,7 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { STATUSES } from '../../utils/statusConfig'
+
+
 function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onStatusChange, onRatingChange }) {
   const currentNote = localNotes[movie.imdbID] !== undefined
     ? localNotes[movie.imdbID]
@@ -5,7 +9,10 @@ function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onSt
 
   return (
     <div>
-      <h4>{movie.Title} ({movie.Year})</h4>
+      <h4> 
+        <FontAwesomeIcon icon={STATUSES[movie.status].icon}/>
+        {movie.Title} ({movie.Year})
+     </h4>
       {movie.Poster && movie.Poster !== 'N/A' && (
         <img src={movie.Poster} alt={movie.Title} width="100" />
       )}
@@ -13,7 +20,6 @@ function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onSt
       <select
         value={movie.status}
         onChange={(e) => onStatusChange(movie.imdbID, e.target.value)}
-        style={{ marginTop: '10px' }}
       >
         <option value="wishlist">Хочу посмотреть</option>
         <option value="watching">Смотрю</option>

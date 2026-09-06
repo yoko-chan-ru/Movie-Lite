@@ -3,6 +3,8 @@ import { useAuth } from '../context/AuthContext'
 import { STATUSES } from '../utils/statusConfig'
 import { sortMovies } from '../utils/sortUtils'
 import MovieCard from '../components/Movie/MovieCard'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
 function MyMoviesPage() {
   const { user, removeMovie, updateMovieStatus, updateMovieRating, updateMovieNotes } = useAuth()
@@ -47,7 +49,8 @@ function MyMoviesPage() {
         <div key={status}>
           <div onClick={() => toggleCollapse(status)}>
             <h3>
-              {icon} {label} ({moviesInGroup.length})
+              <FontAwesomeIcon icon={icon}/>
+              {label} ({moviesInGroup.length})
             </h3>
 
             <select 
@@ -61,7 +64,7 @@ function MyMoviesPage() {
               <option value="title">По алфавиту</option>
             </select>
 
-            <span>{collapsed[status] ? '▶️' : '🔽'}</span>
+            <span><FontAwesomeIcon icon={collapsed[status] ? faChevronRight : faChevronDown} /></span>
           </div>
 
           {!collapsed[status] && (

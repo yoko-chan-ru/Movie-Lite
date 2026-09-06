@@ -1,8 +1,11 @@
+import { faBookmark, faPlay, faCheckCircle,
+  faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+
 export const STATUSES = {
-  wishlist: { label: 'Хочу посмотреть', icon: '📌' },
-  watching: { label: 'Смотрю', icon: '▶️' },
-  watched: { label: 'Посмотрено', icon: '✅' },
-  dropped: { label: 'Брошено', icon: '❌' }
+  wishlist: { label: 'Хочу посмотреть', icon: faBookmark },
+  watching: { label: 'Смотрю', icon: faPlay },
+  watched: { label: 'Посмотрено', icon: faCheckCircle  },
+  dropped: { label: 'Брошено', icon: faTimesCircle  }
 }
 
 export const STATUS_OPTIONS = [
