@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { STATUSES } from '../utils/statusConfig'
+import { sortMovies } from '../utils/sortUtils'
 
 function MyMoviesPage() {
   const { user, removeMovie, updateMovieStatus, updateMovieRating, updateMovieNotes } = useAuth()
   const [localNotes, setLocalNotes] = useState({})
   const [viewMode, setViewMode] = useState('grouped')
-  const [collapsed, setCollapsed] = useState({});
+  const [collapsed, setCollapsed] = useState({})
+  const [sortBy, setSortBy] = useState({})
 
   if (!user) return <p>Войдите, чтобы увидеть свои фильмы</p>
   if (!user.movies || user.movies.length === 0) {
@@ -33,16 +35,31 @@ function MyMoviesPage() {
       const moviesInGroup = user.movies.filter(m => m.status === status)
       if (moviesInGroup.length === 0) return null
 
+      const groupSort = sortBy[status] || 'date'
+      const sortedMovies = sortMovies(moviesInGroup, groupSort)
+
       return (
         <div key={status}>
           <div onClick={() => toggleCollapse(status)}>
           <h3>{icon} {label} ({moviesInGroup.length})</h3>
+
+          <select 
+            value={groupSort}
+            onChange={(e) => setSortBy(prev => ({ ...prev, [status]: e.target.value }))}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <option value="date">По дате</option>
+            <option value="rating">По оценке</option>
+            <option value="year">По году</option>
+            <option value="title">По алфавиту</option>
+          </select>
+
           <span>{collapsed[status] ? '>' : 'v'}</span>
         </div>
 
         {!collapsed[status] && (
           <div>
-            {moviesInGroup.map((movie) => {
+            {sortedMovies.map((movie) => {
               const currentNote = localNotes[movie.imdbID] !== undefined
                 ? localNotes[movie.imdbID]
                 : (movie.notes || '')
