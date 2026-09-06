@@ -6,6 +6,7 @@ function MyMoviesPage() {
     updateMovieNotes } = useAuth()
 
   const [localNotes, setLocalNotes] = useState({})
+  const [viewMode, setViewMode] = useState('grouped')
 
   if (!user) return <p>Войдите, чтобы увидеть свои фильмы</p>
   if (!user.movies || user.movies.length === 0) {
@@ -26,6 +27,17 @@ function MyMoviesPage() {
   return (
     <div>
       <h2>Мои фильмы и сериалы</h2>
+
+      <div>
+      <button onClick={() => setViewMode('grouped')}>
+        По статусам
+      </button>  
+
+      <button onClick={() => setViewMode('list')}>
+        Списком
+      </button>
+      </div>
+
       {user.movies.map((movie) => {
         const currentNote = localNotes[movie.imdbID] !== undefined 
           ? localNotes[movie.imdbID] 
