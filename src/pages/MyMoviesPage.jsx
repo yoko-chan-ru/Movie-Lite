@@ -46,6 +46,7 @@ function MyMoviesPage() {
             <option value="wishlist">Хочу посмотреть</option>
             <option value="watching">Смотрю</option>
             <option value="watched">Посмотрено</option>
+            <option value="dropped">Брошено</option>
           </select>
 
           <div>
