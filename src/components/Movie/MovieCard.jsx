@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { STATUSES } from '../../utils/statusConfig'
+import { Link } from 'react-router-dom'
 
 
 function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onStatusChange, onRatingChange }) {
@@ -11,8 +12,11 @@ function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onSt
     <div>
       <h4> 
         <FontAwesomeIcon icon={STATUSES[movie.status].icon}/>
-        {movie.Title} ({movie.Year})
+        <Link to={`/movie/${movie.imdbID}`}>
+            {movie.Title} ({movie.Year})
+        </Link>
      </h4>
+     
       {movie.Poster && movie.Poster !== 'N/A' && (
         <img src={movie.Poster} alt={movie.Title} width="100" />
       )}
