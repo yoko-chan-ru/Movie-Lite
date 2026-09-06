@@ -7,7 +7,7 @@ import MovieCard from '../components/Movie/MovieCard'
 function MyMoviesPage() {
   const { user, removeMovie, updateMovieStatus, updateMovieRating, updateMovieNotes } = useAuth()
   const [localNotes, setLocalNotes] = useState({})
-  const [viewMode, setViewMode] = useState('grouped')
+  const [viewMode, setViewMode] = useState('list')
   const [collapsed, setCollapsed] = useState({})
   const [sortBy, setSortBy] = useState({})
   const [globalSort, setGlobalSort] = useState('date')
