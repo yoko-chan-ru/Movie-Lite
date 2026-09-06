@@ -6,6 +6,7 @@ function MyMoviesPage() {
   const { user, removeMovie, updateMovieStatus, updateMovieRating, updateMovieNotes } = useAuth()
   const [localNotes, setLocalNotes] = useState({})
   const [viewMode, setViewMode] = useState('grouped')
+  const [collapsed, setCollapsed] = useState({});
 
   if (!user) return <p>Войдите, чтобы увидеть свои фильмы</p>
   if (!user.movies || user.movies.length === 0) {
@@ -14,13 +15,17 @@ function MyMoviesPage() {
 
   const handleNoteChange = (imdbID, value) => {
     setLocalNotes(prev => ({ ...prev, [imdbID]: value }))
-  };
+  }
 
   const handleNoteBlur = (imdbID) => {
     const note = localNotes[imdbID]
     if (note !== undefined) {
       updateMovieNotes(imdbID, note)
     }
+  }
+
+  const toggleCollapse = (status) => {
+    setCollapsed(prev => ({ ...prev, [status]: !prev[status] }))
   }
 
   const renderGroupedView = () => {
@@ -30,8 +35,12 @@ function MyMoviesPage() {
 
       return (
         <div key={status}>
+          <div onClick={() => toggleCollapse(status)}>
           <h3>{icon} {label} ({moviesInGroup.length})</h3>
-          
+          <span>{collapsed[status] ? '>' : 'v'}</span>
+        </div>
+
+        {!collapsed[status] && (
           <div>
             {moviesInGroup.map((movie) => {
               const currentNote = localNotes[movie.imdbID] !== undefined
@@ -91,6 +100,7 @@ function MyMoviesPage() {
               )
             })}
           </div>
+          )}
         </div>
       )
     })
