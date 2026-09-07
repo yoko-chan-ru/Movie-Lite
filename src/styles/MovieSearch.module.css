@@ -222,7 +222,7 @@
   color: #dc3545;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .removeBtn {
     position: static;
     top: auto;
@@ -233,5 +233,12 @@
 
   .resultCard {
     flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .resultsList {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
