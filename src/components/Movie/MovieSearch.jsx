@@ -1,12 +1,15 @@
 import { useState } from 'react'
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext'
 import { searchMovies } from '../../services/omdb'
+import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 
 function MovieSearch() {
   const [query, setQuery] = useState('')
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(false)
-  const { addMovie } = useAuth()
+  const { user, addMovie } = useAuth()
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -16,6 +19,11 @@ function MovieSearch() {
     const results = await searchMovies(query)
     setMovies(results)
     setLoading(false)
+  }
+
+  const isMovieInList = (imdbID) => {
+    if (!user || !user.movies) return false
+    return user.movies.some(m => m.imdbID === imdbID)
   }
 
   return (
@@ -32,18 +40,30 @@ function MovieSearch() {
 
       {loading && <p>Загрузка...</p>}
 
-      {movies.map((movie) => (
-        <div key={movie.imdbID}>
-          <h4>{movie.Title} ({movie.Year})</h4>
-          {movie.Poster && movie.Poster !== 'N/A' && (
-            <img src={movie.Poster} alt={movie.Title} width="100" />
-          )}
-          <button onClick={() => addMovie(movie)}>
-            + В список
-          </button>
-          <hr />
-        </div>
-      ))}
+      {movies.map((movie) => {
+        const inList = isMovieInList(movie.imdbID)
+
+        return (
+          <div key={movie.imdbID}>
+            <Link to={`/movie/${movie.imdbID}`}>
+              <h4>{movie.Title} ({movie.Year})</h4>
+              {movie.Poster && movie.Poster !== 'N/A' && (
+                <img src={movie.Poster} alt={movie.Title} width="100" />
+              )}
+            </Link>
+
+            {inList ? (
+              <span style={{ color: 'green' }}>
+                <FontAwesomeIcon icon={faCheckCircle} /> В списке
+              </span>
+            ) : (
+              <button onClick={() => addMovie(movie)}>
+                + В список
+              </button>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }

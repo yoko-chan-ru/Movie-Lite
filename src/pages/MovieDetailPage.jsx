@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'   // ← добавила useNavigate
 import { getMovieDetails } from '../services/omdb'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faStar, faClock, faTv, faGlobe, faFilm, faUser, faTag } from '@fortawesome/free-solid-svg-icons'
 
 function MovieDetailPage() {
   const { imdbID } = useParams()
+  const navigate = useNavigate()   // ← добавила navigate
   const [movie, setMovie] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -31,9 +32,9 @@ function MovieDetailPage() {
 
   return (
     <div>
-      <Link to="/mymovies">
-        <FontAwesomeIcon icon={faArrowLeft} /> Назад к списку
-      </Link>
+      <button onClick={() => navigate(-1)}>
+        <FontAwesomeIcon icon={faArrowLeft} /> Назад
+      </button>
 
       <div>
         <div>
