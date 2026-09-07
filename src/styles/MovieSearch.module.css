@@ -63,52 +63,6 @@
   background: #0056b3;
 }
 
-.historyContainer {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.historyHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  color: #666;
-}
-
-.historyList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.historyItem {
-  padding: 6px 14px;
-  background: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.historyItem:hover {
-  background: #e0e0e0;
-}
-
-.clearHistoryBtn {
-  background: none;
-  border: none;
-  color: #dc3545;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.clearHistoryBtn:hover {
-  text-decoration: underline;
-}
-
 .loading {
   text-align: center;
   color: #666;
@@ -121,7 +75,6 @@
   gap: 12px;
   margin-top: 20px;
 }
-
 
 .resultCard {
   display: flex;
@@ -162,11 +115,6 @@
 
 .movieTitle a:hover {
   color: #007bff;
-}
-
-.movieYear {
-  color: #666;
-  font-size: 14px;
 }
 
 .movieActions {
@@ -214,4 +162,52 @@
 .removeBtn:hover {
   color: #dc3545;
   transform: scale(1.1);
+}
+
+
+.historyContainer {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.historyHeader {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.historyList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 12px;
+  background: #f0f0f0;
+  border-radius: 16px;
+  font-size: 14px;
+  border: 1px solid #e0e0e0;
+}
+
+.historyItem span {
+  cursor: pointer;
+}
+
+.historyRemoveBtn {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.historyRemoveBtn:hover {
+  color: #dc3545;
 }

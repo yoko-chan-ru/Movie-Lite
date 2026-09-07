@@ -43,9 +43,16 @@ function MovieSearch() {
     }
   }, [query, movies])
 
+
   const saveToHistory = (queryText) => {
     if (!queryText.trim()) return
     const updated = [queryText.trim(), ...searchHistory.filter(q => q !== queryText.trim())].slice(0, 10)
+    setSearchHistory(updated)
+    localStorage.setItem('searchHistory', JSON.stringify(updated))
+  }
+
+  const removeFromHistory = (queryToRemove) => {
+    const updated = searchHistory.filter(q => q !== queryToRemove)
     setSearchHistory(updated)
     localStorage.setItem('searchHistory', JSON.stringify(updated))
   }
@@ -76,11 +83,6 @@ function MovieSearch() {
     setMovies([])
     sessionStorage.removeItem('searchQuery')
     sessionStorage.removeItem('searchResults')
-  }
-
-  const handleClearHistory = () => {
-    setSearchHistory([])
-    localStorage.removeItem('searchHistory')
   }
 
   const isMovieInList = (imdbID) => {
@@ -118,19 +120,21 @@ function MovieSearch() {
         <div className={styles.historyContainer}>
           <div className={styles.historyHeader}>
             <span><FontAwesomeIcon icon={faClock} /> Недавние запросы:</span>
-            <button className={styles.clearHistoryBtn} onClick={handleClearHistory}>
-              Очистить историю
-            </button>
           </div>
           <div className={styles.historyList}>
             {searchHistory.map((q, i) => (
-              <button
-                key={i}
-                className={styles.historyItem}
-                onClick={() => handleHistoryClick(q)}
-              >
-                {q}
-              </button>
+              <div key={i} className={styles.historyItem}>
+                <span onClick={() => handleHistoryClick(q)}>{q}</span>
+                <button
+                  className={styles.historyRemoveBtn}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    removeFromHistory(q)
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
             ))}
           </div>
         </div>
