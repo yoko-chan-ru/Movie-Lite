@@ -151,6 +151,13 @@
   transform: scale(1.1);
 }
 
+.movieHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
 .removeBtn {
   background: transparent;
   border: none;

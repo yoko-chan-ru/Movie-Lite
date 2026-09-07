@@ -11,9 +11,6 @@ function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onSt
 
   return (
     <div className={styles.card}>
-      <button className={styles.removeBtn} onClick={() => onRemove(movie.imdbID)}>
-           <FontAwesomeIcon icon={faTrash} />
-      </button>
       
       <div className={styles.header}>
         <FontAwesomeIcon icon={STATUSES[movie.status].icon} />
@@ -22,6 +19,9 @@ function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onSt
             {movie.Title} ({movie.Year})
           </Link>
         </h4>
+        <button className={styles.removeBtn} onClick={() => onRemove(movie.imdbID)}>
+           <FontAwesomeIcon icon={faTrash} />
+        </button>
       </div>
 
       {movie.Poster && movie.Poster !== 'N/A' && (

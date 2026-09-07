@@ -43,7 +43,6 @@ function MovieSearch() {
     }
   }, [query, movies])
 
-
   const saveToHistory = (queryText) => {
     if (!queryText.trim()) return
     const updated = [queryText.trim(), ...searchHistory.filter(q => q !== queryText.trim())].slice(0, 10)
@@ -148,16 +147,6 @@ function MovieSearch() {
 
           return (
             <div key={movie.imdbID} className={styles.resultCard}>
-              {inList && (
-                <button
-                  className={styles.removeBtn}
-                  onClick={() => removeMovie(movie.imdbID)}
-                  aria-label="Удалить из списка"
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
-              )}
-
               {movie.Poster && movie.Poster !== 'N/A' && (
                 <img
                   src={movie.Poster}
@@ -166,11 +155,21 @@ function MovieSearch() {
                 />
               )}
               <div className={styles.movieInfo}>
-                <h4 className={styles.movieTitle}>
-                  <Link to={`/movie/${movie.imdbID}`}>
-                    {movie.Title} ({movie.Year})
-                  </Link>
-                </h4>
+                <div className={styles.movieHeader}>
+                  <h4 className={styles.movieTitle}>
+                    <Link to={`/movie/${movie.imdbID}`}>
+                      {movie.Title} ({movie.Year})
+                    </Link>
+                  </h4>
+                  {inList && (
+                    <button
+                      className={styles.removeBtn}
+                      onClick={() => removeMovie(movie.imdbID)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  )}
+                </div>
                 <div className={styles.movieActions}>
                   {inList ? (
                     <span className={styles.inListBadge}>
