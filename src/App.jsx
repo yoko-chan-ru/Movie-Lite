@@ -11,16 +11,16 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div>
+      <div className="container"> 
           <Header />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/mymovies" element={<MyMoviesPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/movie/:imdbID" element={<MovieDetailPage />} />
-          </Routes>
-        </div>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/mymovies" element={<MyMoviesPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/movie/:imdbID" element={<MovieDetailPage />} />
+            </Routes>
+      </div>
       </BrowserRouter>
     </AuthProvider>
   )
