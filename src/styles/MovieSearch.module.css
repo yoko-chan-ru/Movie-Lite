@@ -77,6 +77,12 @@
   margin-top: 20px;
 }
 
+@media (max-width: 600px) {
+  .resultList {
+    grid-template-columns: 1fr;
+  }
+}
+
 .resultCard {
   display: flex;
   align-items: flex-start;
