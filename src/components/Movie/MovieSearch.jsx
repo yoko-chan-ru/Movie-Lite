@@ -9,7 +9,7 @@ function MovieSearch() {
   const [query, setQuery] = useState('')
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(false)
-  const { user, addMovie } = useAuth()
+  const { user, addMovie, removeMovie } = useAuth()
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -52,15 +52,26 @@ function MovieSearch() {
               )}
             </Link>
 
-            {inList ? (
-              <span style={{ color: 'green' }}>
-                <FontAwesomeIcon icon={faCheckCircle} /> В списке
-              </span>
-            ) : (
-              <button onClick={() => addMovie(movie)}>
-                + В список
-              </button>
-            )}
+            <div>
+              {inList ? (
+                <>
+                  <span>
+                    <FontAwesomeIcon icon={faCheckCircle} /> В списке
+                  </span>
+                  <button 
+                    onClick={() => removeMovie(movie.imdbID)}
+                  >
+                    Удалить
+                  </button>
+                </>
+              ) : (
+                <button 
+                  onClick={() => addMovie(movie)}
+                >
+                  + В список
+                </button>
+              )}
+            </div>
           </div>
         )
       })}
