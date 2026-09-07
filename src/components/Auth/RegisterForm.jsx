@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { useAuth } from '../../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
+import styles from '../../styles/Auth.module.css'
 
 function RegisterForm() {
   const [name, setName] = useState('')
@@ -24,14 +25,15 @@ function RegisterForm() {
     } finally {
       setLoading(false)
     }
-  };
+  }
 
   return (
-    <div>
-      <h2>Регистрация</h2>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit}>
+    <div className={styles.page}>
+      <h2 className={styles.title}>Регистрация</h2>
+      {error && <p className={styles.error}>{error}</p>}
+      <form className={styles.form} onSubmit={handleSubmit}>
         <input
+          className={styles.input}
           type="text"
           placeholder="Имя"
           value={name}
@@ -39,6 +41,7 @@ function RegisterForm() {
           required
         />
         <input
+          className={styles.input}
           type="email"
           placeholder="Email"
           value={email}
@@ -46,13 +49,14 @@ function RegisterForm() {
           required
         />
         <input
+          className={styles.input}
           type="password"
           placeholder="Пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" disabled={loading}>
+        <button className={styles.submitBtn} type="submit" disabled={loading}>
           {loading ? 'Регистрация...' : 'Зарегистрироваться'}
         </button>
       </form>

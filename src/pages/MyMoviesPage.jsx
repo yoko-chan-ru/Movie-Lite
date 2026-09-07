@@ -5,6 +5,7 @@ import { sortMovies } from '../utils/sortUtils'
 import MovieCard from '../components/Movie/MovieCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import styles from '../styles/MyMoviesPage.module.css'
 
 function MyMoviesPage() {
   const { user, removeMovie, updateMovieStatus, updateMovieRating, updateMovieNotes } = useAuth()
@@ -39,9 +40,9 @@ function MyMoviesPage() {
   }
 
   const showMore = (status) => {
-  setVisibleCount(prev => ({
-    ...prev,
-    [status]: (prev[status] || 5) + 5
+    setVisibleCount(prev => ({
+      ...prev,
+      [status]: (prev[status] || 5) + 5
     }))
   }
 
@@ -55,17 +56,16 @@ function MyMoviesPage() {
       const visibleMovies = sortedMovies.slice(0, visibleCount[status] || 5)
       const hasMore = sortedMovies.length > (visibleCount[status] || 5)
 
-
       return (
-        <div key={status}>
-          <div onClick={() => toggleCollapse(status)}>
-
-            <h3>
-              <FontAwesomeIcon icon={icon}/>
+        <div key={status} className={styles.groupBlock}>
+          <div onClick={() => toggleCollapse(status)} className={styles.groupHeader}>
+            <h3 className={styles.groupTitle}>
+              <FontAwesomeIcon icon={icon} />
               {label} ({moviesInGroup.length})
             </h3>
 
-            <select 
+            <select
+              className={styles.groupSort}
               value={groupSort}
               onChange={(e) => setSortBy(prev => ({ ...prev, [status]: e.target.value }))}
               onClick={(e) => e.stopPropagation()}
@@ -76,37 +76,39 @@ function MyMoviesPage() {
               <option value="title">По алфавиту</option>
             </select>
 
-            <span><FontAwesomeIcon icon={collapsed[status] ? faChevronRight : faChevronDown} /></span>
+            <span className={styles.groupIcon}>
+              <FontAwesomeIcon icon={collapsed[status] ? faChevronRight : faChevronDown} />
+            </span>
           </div>
 
-             {!collapsed[status] && (
-          <div>
-            {visibleMovies.map((movie) => (
-              <MovieCard
-                key={movie.imdbID}
-                movie={movie}
-                localNotes={localNotes}
-                onNoteChange={handleNoteChange}
-                onNoteBlur={handleNoteBlur}
-                onRemove={removeMovie}
-                onStatusChange={updateMovieStatus}
-                onRatingChange={updateMovieRating}
-              />
-            ))}
+          {!collapsed[status] && (
+            <div className={styles.groupContent}>
+              <div className={styles.movieList}>
+                {visibleMovies.map((movie) => (
+                  <MovieCard
+                    key={movie.imdbID}
+                    movie={movie}
+                    localNotes={localNotes}
+                    onNoteChange={handleNoteChange}
+                    onNoteBlur={handleNoteBlur}
+                    onRemove={removeMovie}
+                    onStatusChange={updateMovieStatus}
+                    onRatingChange={updateMovieRating}
+                  />
+                ))}
+              </div>
 
-            {hasMore && (
-              <button 
-                onClick={() => showMore(status)}
-              >
-                Показать ещё ({sortedMovies.length - (visibleCount[status] || 5)})
-              </button>
-            )}
-          </div>
-        )}
-      </div>
-    )
-  })
-}
+              {hasMore && (
+                <button className={styles.showMoreBtn} onClick={() => showMore(status)}>
+                  Показать ещё ({sortedMovies.length - (visibleCount[status] || 5)})
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )
+    })
+  }
 
   const renderListView = () => {
     const sortedMovies = sortMovies(user.movies, globalSort)
@@ -117,39 +119,45 @@ function MyMoviesPage() {
 
     return (
       <div>
-        <div>
-          <label>Сортировка: </label>
-          <select 
-            value={globalSort} 
-            onChange={(e) => {
-              setGlobalSort(e.target.value)
-              setCurrentPage(1)
-            }}
-          >
-            <option value="date">По дате</option>
-            <option value="rating">По оценке</option>
-            <option value="year">По году</option>
-            <option value="title">По алфавиту</option>
-          </select>
-          <span> Всего: {totalMovies} </span>
+        <div className={styles.listViewControls}>
+          <div>
+            <span className={styles.sortLabel}>Сортировка: </span>
+            <select
+              className={styles.sortSelect}
+              value={globalSort}
+              onChange={(e) => {
+                setGlobalSort(e.target.value)
+                setCurrentPage(1)
+              }}
+            >
+              <option value="date">По дате</option>
+              <option value="rating">По оценке</option>
+              <option value="year">По году</option>
+              <option value="title">По алфавиту</option>
+            </select>
+          </div>
+          <span className={styles.totalBadge}>Всего: {totalMovies}</span>
         </div>
 
-        {paginatedMovies.map((movie) => (
-          <MovieCard
-            key={movie.imdbID}
-            movie={movie}
-            localNotes={localNotes}
-            onNoteChange={handleNoteChange}
-            onNoteBlur={handleNoteBlur}
-            onRemove={removeMovie}
-            onStatusChange={updateMovieStatus}
-            onRatingChange={updateMovieRating}
-          />
-        ))}
+        <div className={styles.movieList}>
+          {paginatedMovies.map((movie) => (
+            <MovieCard
+              key={movie.imdbID}
+              movie={movie}
+              localNotes={localNotes}
+              onNoteChange={handleNoteChange}
+              onNoteBlur={handleNoteBlur}
+              onRemove={removeMovie}
+              onStatusChange={updateMovieStatus}
+              onRatingChange={updateMovieRating}
+            />
+          ))}
+        </div>
 
         {totalPages > 1 && (
-          <div>
-            <button 
+          <div className={styles.pagination}>
+            <button
+              className={styles.pageBtn}
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
             >
@@ -159,13 +167,15 @@ function MyMoviesPage() {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
+                className={`${styles.pageBtn} ${currentPage === page ? styles.active : ''}`}
                 onClick={() => setCurrentPage(page)}
               >
                 {page}
               </button>
             ))}
 
-            <button 
+            <button
+              className={styles.pageBtn}
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
             >
@@ -178,16 +188,23 @@ function MyMoviesPage() {
   }
 
   return (
-    <div>
-      <h2>Мои фильмы и сериалы</h2>
-
-      <div>
-        <button onClick={() => setViewMode('grouped')}>
-          По статусам
-        </button>
-        <button onClick={() => setViewMode('list')}>
-          Списком
-        </button>
+    <div className={styles.page}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>Мои фильмы и сериалы</h2>
+        <div className={styles.controls}>
+          <button
+            className={`${styles.toggleBtn} ${viewMode === 'grouped' ? styles.active : ''}`}
+            onClick={() => setViewMode('grouped')}
+          >
+            По статусам
+          </button>
+          <button
+            className={`${styles.toggleBtn} ${viewMode === 'list' ? styles.active : ''}`}
+            onClick={() => setViewMode('list')}
+          >
+            Списком
+          </button>
+        </div>
       </div>
 
       {viewMode === 'grouped' ? renderGroupedView() : renderListView()}

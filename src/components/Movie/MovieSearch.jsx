@@ -4,6 +4,7 @@ import { searchMovies } from '../../services/omdb'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle, faTimes, faClock } from '@fortawesome/free-solid-svg-icons'
+import styles from '../../styles/MovieSearch.module.css'
 
 function MovieSearch() {
   const [query, setQuery] = useState('')
@@ -28,7 +29,7 @@ function MovieSearch() {
       setMovies(JSON.parse(savedMovies))
     }
   }, [])
-  
+
   useEffect(() => {
     if (query) {
       sessionStorage.setItem('searchQuery', query)
@@ -48,12 +49,12 @@ function MovieSearch() {
     setSearchHistory(updated)
     localStorage.setItem('searchHistory', JSON.stringify(updated))
   }
-  
+
   const handleSearch = async (e) => {
     e.preventDefault()
     if (!query.trim()) return
 
-    saveToHistory(query.trim()) 
+    saveToHistory(query.trim())
 
     setLoading(true)
     const results = await searchMovies(query)
@@ -88,45 +89,44 @@ function MovieSearch() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSearch}>
-        <div>
+    <div className={styles.searchContainer}>
+      <form onSubmit={handleSearch} className={styles.searchForm}>
+        <div className={styles.inputWrapper}>
           <input
             type="text"
             placeholder="Название фильма..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            className={styles.searchInput}
           />
           {query && (
             <button
               type="button"
               onClick={handleClear}
+              className={styles.clearBtn}
             >
               <FontAwesomeIcon icon={faTimes} />
             </button>
           )}
         </div>
-        <button type="submit">Искать</button>
+        <button type="submit" className={styles.searchButton}>
+          Искать
+        </button>
       </form>
 
       {!query && searchHistory.length > 0 && (
-        <div>
-          <div>
-            <p>
-              <FontAwesomeIcon icon={faClock} />
-              Недавние запросы:
-            </p>
-            <button
-              type="button"
-              onClick={handleClearHistory}
-            >
+        <div className={styles.historyContainer}>
+          <div className={styles.historyHeader}>
+            <span><FontAwesomeIcon icon={faClock} /> Недавние запросы:</span>
+            <button className={styles.clearHistoryBtn} onClick={handleClearHistory}>
               Очистить историю
             </button>
           </div>
-          <div>
+          <div className={styles.historyList}>
             {searchHistory.map((q, i) => (
               <button
                 key={i}
+                className={styles.historyItem}
                 onClick={() => handleHistoryClick(q)}
               >
                 {q}
@@ -136,43 +136,54 @@ function MovieSearch() {
         </div>
       )}
 
-      {loading && <p>Загрузка...</p>}
+      {loading && <div className={styles.loading}>Загрузка...</div>}
 
-      {movies.map((movie) => {
-        const inList = isMovieInList(movie.imdbID)
+      <div className={styles.resultsList}>
+        {movies.map((movie) => {
+          const inList = isMovieInList(movie.imdbID)
 
-        return (
-          <div key={movie.imdbID}>
-            <Link to={`/movie/${movie.imdbID}`}>
-              <h4>{movie.Title} ({movie.Year})</h4>
+          return (
+            <div key={movie.imdbID} className={styles.resultCard}>
               {movie.Poster && movie.Poster !== 'N/A' && (
-                <img src={movie.Poster} alt={movie.Title} width="100" />
+                <img
+                  src={movie.Poster}
+                  alt={movie.Title}
+                  className={styles.poster}
+                />
               )}
-            </Link>
-
-            <div>
-              {inList ? (
-                <>
-                  <span>
-                    <FontAwesomeIcon icon={faCheckCircle} /> В списке
-                  </span>
-                  <button 
-                    onClick={() => removeMovie(movie.imdbID)}
-                  >
-                    Удалить
-                  </button>
-                </>
-              ) : (
-                <button 
-                  onClick={() => addMovie(movie)}
-                >
-                  + В список
-                </button>
-              )}
+              <div className={styles.movieInfo}>
+                <h4 className={styles.movieTitle}>
+                  <Link to={`/movie/${movie.imdbID}`}>
+                    {movie.Title} ({movie.Year})
+                  </Link>
+                </h4>
+                <div className={styles.movieActions}>
+                  {inList ? (
+                    <>
+                      <span className={styles.inListBadge}>
+                        <FontAwesomeIcon icon={faCheckCircle} /> В списке
+                      </span>
+                      <button
+                        className={styles.removeBtn}
+                        onClick={() => removeMovie(movie.imdbID)}
+                      >
+                        Удалить
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className={styles.addBtn}
+                      onClick={() => addMovie(movie)}
+                    >
+                      + В список
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }
