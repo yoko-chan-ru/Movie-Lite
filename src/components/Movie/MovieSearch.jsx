@@ -3,13 +3,21 @@ import { useAuth } from '../../context/AuthContext'
 import { searchMovies } from '../../services/omdb'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faTimes, faClock } from '@fortawesome/free-solid-svg-icons'
 
 function MovieSearch() {
   const [query, setQuery] = useState('')
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(false)
+  const [searchHistory, setSearchHistory] = useState([])
   const { user, addMovie, removeMovie } = useAuth()
+
+  useEffect(() => {
+    const saved = localStorage.getItem('searchHistory')
+    if (saved) {
+      setSearchHistory(JSON.parse(saved))
+    }
+  }, [])
 
   useEffect(() => {
     const savedQuery = sessionStorage.getItem('searchQuery')
@@ -34,12 +42,30 @@ function MovieSearch() {
     }
   }, [query, movies])
 
+  const saveToHistory = (queryText) => {
+    if (!queryText.trim()) return
+    const updated = [queryText.trim(), ...searchHistory.filter(q => q !== queryText.trim())].slice(0, 10)
+    setSearchHistory(updated)
+    localStorage.setItem('searchHistory', JSON.stringify(updated))
+  }
+  
   const handleSearch = async (e) => {
     e.preventDefault()
     if (!query.trim()) return
 
+    saveToHistory(query.trim()) 
+
     setLoading(true)
     const results = await searchMovies(query)
+    setMovies(results)
+    setLoading(false)
+  }
+
+  const handleHistoryClick = async (q) => {
+    setQuery(q)
+    saveToHistory(q)
+    setLoading(true)
+    const results = await searchMovies(q)
     setMovies(results)
     setLoading(false)
   }
@@ -49,6 +75,11 @@ function MovieSearch() {
     setMovies([])
     sessionStorage.removeItem('searchQuery')
     sessionStorage.removeItem('searchResults')
+  }
+
+  const handleClearHistory = () => {
+    setSearchHistory([])
+    localStorage.removeItem('searchHistory')
   }
 
   const isMovieInList = (imdbID) => {
@@ -77,6 +108,33 @@ function MovieSearch() {
         </div>
         <button type="submit">Искать</button>
       </form>
+
+      {!query && searchHistory.length > 0 && (
+        <div>
+          <div>
+            <p>
+              <FontAwesomeIcon icon={faClock} />
+              Недавние запросы:
+            </p>
+            <button
+              type="button"
+              onClick={handleClearHistory}
+            >
+              Очистить историю
+            </button>
+          </div>
+          <div>
+            {searchHistory.map((q, i) => (
+              <button
+                key={i}
+                onClick={() => handleHistoryClick(q)}
+              >
+                {q}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {loading && <p>Загрузка...</p>}
 
