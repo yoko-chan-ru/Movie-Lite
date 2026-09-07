@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext'
 import { searchMovies } from '../../services/omdb'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 function MovieSearch() {
   const [query, setQuery] = useState('')
@@ -11,8 +11,28 @@ function MovieSearch() {
   const [loading, setLoading] = useState(false)
   const { user, addMovie, removeMovie } = useAuth()
 
-   useEffect(() => {
-  }, [user])
+  useEffect(() => {
+    const savedQuery = sessionStorage.getItem('searchQuery')
+    const savedMovies = sessionStorage.getItem('searchResults')
+    
+    if (savedQuery && savedMovies) {
+      setQuery(savedQuery)
+      setMovies(JSON.parse(savedMovies))
+    }
+  }, [])
+  
+  useEffect(() => {
+    if (query) {
+      sessionStorage.setItem('searchQuery', query)
+    } else {
+      sessionStorage.removeItem('searchQuery')
+    }
+    if (movies.length > 0) {
+      sessionStorage.setItem('searchResults', JSON.stringify(movies))
+    } else {
+      sessionStorage.removeItem('searchResults')
+    }
+  }, [query, movies])
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -24,6 +44,13 @@ function MovieSearch() {
     setLoading(false)
   }
 
+  const handleClear = () => {
+    setQuery('')
+    setMovies([])
+    sessionStorage.removeItem('searchQuery')
+    sessionStorage.removeItem('searchResults')
+  }
+
   const isMovieInList = (imdbID) => {
     if (!user || !user.movies) return false
     return user.movies.some(m => m.imdbID === imdbID)
@@ -32,12 +59,22 @@ function MovieSearch() {
   return (
     <div>
       <form onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+        <div>
+          <input
+            type="text"
+            placeholder="Название фильма..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={handleClear}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+          )}
+        </div>
         <button type="submit">Искать</button>
       </form>
 
