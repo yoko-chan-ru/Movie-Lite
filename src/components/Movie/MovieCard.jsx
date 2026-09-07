@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { STATUSES } from '../../utils/statusConfig'
 import { Link } from 'react-router-dom'
 import styles from '../../styles/MovieCard.module.css'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onStatusChange, onRatingChange }) {
   const currentNote = localNotes[movie.imdbID] !== undefined
@@ -10,6 +11,10 @@ function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onSt
 
   return (
     <div className={styles.card}>
+      <button className={styles.removeBtn} onClick={() => onRemove(movie.imdbID)}>
+           <FontAwesomeIcon icon={faTrash} />
+      </button>
+      
       <div className={styles.header}>
         <FontAwesomeIcon icon={STATUSES[movie.status].icon} />
         <h4 className={styles.title}>
@@ -46,9 +51,6 @@ function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onSt
           ))}
         </select>
 
-        <button className={styles.removeBtn} onClick={() => onRemove(movie.imdbID)}>
-          Удалить
-        </button>
       </div>
 
       <div className={styles.notes}>

@@ -122,15 +122,16 @@
   margin-top: 20px;
 }
 
+
 .resultCard {
   display: flex;
+  align-items: flex-start;
   gap: 16px;
   padding: 16px;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.2s;
-  align-items: flex-start;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  position: relative;
 }
 
 .resultCard:hover {
@@ -197,16 +198,20 @@
 }
 
 .removeBtn {
-  padding: 6px 16px;
-  background: #dc3545;
-  color: white;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
   border: none;
-  border-radius: 4px;
+  color: #999;
+  font-size: 18px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s;
+  transition: color 0.2s, transform 0.1s;
+  padding: 4px 6px;
+  z-index: 2;
 }
 
 .removeBtn:hover {
-  background: #b02a37;
+  color: #dc3545;
+  transform: scale(1.1);
 }

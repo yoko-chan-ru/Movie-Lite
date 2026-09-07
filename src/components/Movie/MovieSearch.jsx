@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext'
 import { searchMovies } from '../../services/omdb'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle, faTimes, faClock } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faTimes, faClock, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import styles from '../../styles/MovieSearch.module.css'
 
 function MovieSearch() {
@@ -144,6 +144,16 @@ function MovieSearch() {
 
           return (
             <div key={movie.imdbID} className={styles.resultCard}>
+              {inList && (
+                <button
+                  className={styles.removeBtn}
+                  onClick={() => removeMovie(movie.imdbID)}
+                  aria-label="Удалить из списка"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              )}
+
               {movie.Poster && movie.Poster !== 'N/A' && (
                 <img
                   src={movie.Poster}
@@ -159,23 +169,15 @@ function MovieSearch() {
                 </h4>
                 <div className={styles.movieActions}>
                   {inList ? (
-                    <>
-                      <span className={styles.inListBadge}>
-                        <FontAwesomeIcon icon={faCheckCircle} /> В списке
-                      </span>
-                      <button
-                        className={styles.removeBtn}
-                        onClick={() => removeMovie(movie.imdbID)}
-                      >
-                        Удалить
-                      </button>
-                    </>
+                    <span className={styles.inListBadge}>
+                      <FontAwesomeIcon icon={faCheck} />
+                    </span>
                   ) : (
                     <button
                       className={styles.addBtn}
                       onClick={() => addMovie(movie)}
                     >
-                      + В список
+                      <FontAwesomeIcon icon={faPlus} />
                     </button>
                   )}
                 </div>
