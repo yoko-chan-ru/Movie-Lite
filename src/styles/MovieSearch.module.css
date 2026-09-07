@@ -87,11 +87,10 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  padding: 16px;
+  padding: 20px 16px 16px; 
   background: white;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  position: relative;
 }
 
 .resultCard:hover {
@@ -153,17 +152,14 @@
 }
 
 .removeBtn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
   background: transparent;
   border: none;
   color: #999;
   font-size: 18px;
   cursor: pointer;
   transition: color 0.2s, transform 0.1s;
-  padding: 4px 6px;
-  z-index: 2;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .removeBtn:hover {
@@ -217,4 +213,18 @@
 
 .historyRemoveBtn:hover {
   color: #dc3545;
+}
+
+@media (max-width: 600px) {
+  .removeBtn {
+    position: static;
+    top: auto;
+    right: auto;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .resultCard {
+    flex-wrap: wrap;
+  }
 }
