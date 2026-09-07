@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { searchMovies } from '../../services/omdb'
 import { Link } from 'react-router-dom'
@@ -10,6 +10,9 @@ function MovieSearch() {
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(false)
   const { user, addMovie, removeMovie } = useAuth()
+
+   useEffect(() => {
+  }, [user])
 
   const handleSearch = async (e) => {
     e.preventDefault()
