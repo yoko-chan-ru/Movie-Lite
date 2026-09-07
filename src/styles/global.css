@@ -45,6 +45,12 @@ a {
   border-top: 1px solid #e0e0e0;
 }
 
+.page h2,
+.page h3,
+.page p {
+  text-align: center;
+}
+
 button {
   cursor: pointer;
   border: none;
