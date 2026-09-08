@@ -1,17 +1,18 @@
 .page {
   max-width: 400px;
   margin: 60px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px 28px;
+  background: #faf8f5;
+  border: 1px solid #ccc;
+  border-radius: 2px;
 }
 
 .title {
   font-size: 24px;
   text-align: center;
   margin-bottom: 20px;
-  color: #1a1a2e;
+  color: #222;
+  font-weight: 700;
 }
 
 .form {
@@ -21,44 +22,44 @@
 }
 
 .input {
-  padding: 12px 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border: 1px solid #999;
+  border-radius: 2px;
   font-size: 16px;
-  transition: border-color 0.2s;
   width: 100%;
   box-sizing: border-box;
+  background: #faf8f5;
+  transition: border-color 0.15s;
 }
 
 .input:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: #3b7bc9;
 }
 
 .error {
-  color: #dc3545;
+  color: #a94442;
   font-size: 14px;
   text-align: center;
   margin: 0;
 }
 
 .submitBtn {
-  padding: 12px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
+  padding: 10px;
+  background: #f2f0eb;
+  color: #222;
+  border: 1px solid #888;
+  border-radius: 2px;
   font-size: 16px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.15s;
 }
 
 .submitBtn:hover {
-  background: #0056b3;
+  background: #d9d6ce;
 }
 
 .submitBtn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }

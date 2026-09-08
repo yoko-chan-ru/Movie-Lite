@@ -16,6 +16,7 @@
 .title {
   font-size: 24px;
   margin: 0;
+  font-weight: 700;
 }
 
 .controls {
@@ -25,43 +26,78 @@
 }
 
 .toggleBtn {
-  padding: 8px 16px;
-  border: 1px solid #007bff;
-  background: white;
-  color: #007bff;
-  border-radius: 6px;
+  padding: 6px 14px;
+  border: 1px solid #888;
+  background: #ffffff;
+  color: #222;
+  border-radius: 2px;
   cursor: pointer;
   font-size: 14px;
-  transition: 0.2s;
+  transition: background 0.15s;
 }
 
 .toggleBtn.active {
-  background: #007bff;
-  color: white;
+  background: #e0e0e0;
+  border-color: #888;
 }
 
 .toggleBtn:hover {
-  opacity: 0.8;
+  background: #e0e0e0;
 }
 
 .groupBlock {
-  margin-bottom: 30px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  margin-bottom: 24px;
+  border: 1px solid #d0d0d0;
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .groupHeader {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
-  background: #f5f5f5;
+  padding: 10px 16px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.15s;
 }
 
 .groupHeader:hover {
-  background: #ebebeb;
+  opacity: 0.85;
+}
+
+.groupHeader.wishlist {
+  background: #FFE8D8;
+  border: 1px solid #FFB380;
+}
+
+.groupHeader.wishlist .groupTitle {
+  color: #FF8A3B;
+}
+
+.groupHeader.watching {
+  background: #EBFAFF;
+  border: 1px solid #A8D8EA;
+}
+
+.groupHeader.watching .groupTitle {
+  color: #6EC2DE;
+}
+
+.groupHeader.watched {
+  background: #F2FDEC;
+  border: 1px solid #A8D88A;
+}
+
+.groupHeader.watched .groupTitle {
+  color: #74BA36;
+}
+
+.groupHeader.dropped {
+  background: #FFEDEB;
+  border: 1px solid #EAA8AA;
+}
+
+.groupHeader.dropped .groupTitle {
+  color: #DB6468;
 }
 
 .groupTitle {
@@ -71,19 +107,27 @@
   font-size: 18px;
   margin: 0;
   flex-shrink: 0;
+  font-weight: 600;
 }
 
 .groupSort {
   margin-left: auto;
   margin-right: 16px;
   padding: 4px 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
   font-size: 14px;
-  background: white;
-  color: #333;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  color: #222;
   cursor: pointer;
+  transition: background 0.15s;
 }
+
+.groupSort:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
 
 .groupIcon {
   font-size: 14px;
@@ -93,6 +137,7 @@
 
 .groupContent {
   padding: 16px;
+  background: #ffffff;
 }
 
 .movieList {
@@ -109,13 +154,13 @@
 
 .showMoreBtn {
   margin-top: 12px;
-  padding: 8px 16px;
-  background: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #888;
+  border-radius: 2px;
   cursor: pointer;
   font-size: 14px;
-  transition: 0.2s;
+  transition: background 0.15s;
 }
 
 .showMoreBtn:hover {
@@ -130,8 +175,9 @@
   gap: 12px;
   margin-bottom: 20px;
   padding: 12px 16px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  background: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  border-radius: 2px;
 }
 
 .sortLabel {
@@ -140,16 +186,25 @@
 }
 
 .sortSelect {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
   font-size: 14px;
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  color: #222;
+  cursor: pointer;
+  transition: background 0.15s;
 }
+
+.sortSelect:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
 
 .totalBadge {
   font-size: 14px;
-  color: #666;
+  color: #555;
 }
 
 .pagination {
@@ -161,19 +216,18 @@
 }
 
 .pageBtn {
-  padding: 6px 12px;
-  border: 1px solid #ddd;
-  background: white;
-  border-radius: 4px;
+  padding: 4px 12px;
+  border: 1px solid #999;
+  background: #ffffff;
+  border-radius: 2px;
   cursor: pointer;
   font-size: 14px;
-  transition: 0.2s;
+  transition: background 0.15s;
 }
 
 .pageBtn.active {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
+  background: #e0e0e0;
+  border-color: #888;
 }
 
 .pageBtn:hover:not(.active) {

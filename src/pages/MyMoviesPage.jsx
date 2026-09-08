@@ -42,7 +42,7 @@ function MyMoviesPage() {
   const showMore = (status) => {
     setVisibleCount(prev => ({
       ...prev,
-      [status]: (prev[status] || 5) + 5
+      [status]: (prev[status] || 4) + 4
     }))
   }
 
@@ -53,12 +53,12 @@ function MyMoviesPage() {
 
       const groupSort = sortBy[status] || 'date'
       const sortedMovies = sortMovies(moviesInGroup, groupSort)
-      const visibleMovies = sortedMovies.slice(0, visibleCount[status] || 5)
-      const hasMore = sortedMovies.length > (visibleCount[status] || 5)
+      const visibleMovies = sortedMovies.slice(0, visibleCount[status] || 4)
+      const hasMore = sortedMovies.length > (visibleCount[status] || 4)
 
       return (
         <div key={status} className={styles.groupBlock}>
-          <div onClick={() => toggleCollapse(status)} className={styles.groupHeader}>
+          <div onClick={() => toggleCollapse(status)} className={`${styles.groupHeader} ${styles[status]}`}>
             <h3 className={styles.groupTitle}>
               <FontAwesomeIcon icon={icon} />
               {label} ({moviesInGroup.length})
