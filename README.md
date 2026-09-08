@@ -1,16 +1,74 @@
-# React + Vite
+# Movie Lite — movie and series tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Movie Lite is a single-page React application for searching movies and series, adding them to a personal list, rating, taking notes, and tracking watch status. This project was created as a React course assignment.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Demo
 
-## React Compiler
+Link will be added after deployment
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- User registration and authentication (Firebase Auth)
+- Movie and series search via OMDb API
+- Add movies to personal list
+- Status management: Want to watch, Watching, Watched, Dropped
+- Rating from 1 to 10
+- Personal notes per movie
+- Filtering and sorting by status, rating, year, title
+- Two view modes: List view with pagination, Grouped by status with Show more button
+- Detailed movie page
+- Search history with individual entry deletion
+
+---
+
+## Tech Stack
+
+- React 18
+- React Router v6
+- Firebase (Authentication + Firestore)
+- OMDb API
+- Fetch / Axios
+- CSS Modules
+- FontAwesome
+- Vite
+
+---
+
+## Project Structure
+
+src/
+├── assets/
+├── components/
+│   ├── Auth/
+│   ├── Layout/
+│   └── Movie/
+├── context/
+├── pages/
+├── services/
+├── styles/
+└── utils/
+
+---
+
+## Setup and Run
+
+git clone https://github.com/YOUR_USERNAME/movie-lite.git
+cd movie-lite
+npm install
+npm run dev
+
+---
+
+## Environment Variables
+
+Create .env file in the root directory: VITE_OMDB_KEY=your_omdb_key
+
+---
+
+## Author
+
+yoko-chan-ru
