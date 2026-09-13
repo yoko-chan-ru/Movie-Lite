@@ -4,15 +4,21 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
 import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { auth, db } from '../services/firebase'
 
+// Контекст авторизации — хранит пользователя и его фильмы
 const AuthContext = createContext()
 
 export function AuthProvider({ children }) {
+  // Кто сейчас залогинен (null, если никто)
   const [user, setUser] = useState(null)
+
+  // Идёт ли загрузка данных пользователя
   const [loading, setLoading] = useState(true)
 
+  // Подписка на изменения авторизации Firebase
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
+        // Пользователь залогинен — загружаем его данные из Firestore
         const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
         if (userDoc.exists()) {
           setUser({ 
@@ -20,6 +26,7 @@ export function AuthProvider({ children }) {
             ...userDoc.data() 
           })
         } else {
+          // если документа нет, создаём временный объект
           setUser({ 
             id: firebaseUser.uid, 
             email: firebaseUser.email,
@@ -33,9 +40,14 @@ export function AuthProvider({ children }) {
       setLoading(false)
     })
 
+
+    // Отписываемся при удалении компонента
     return () => unsubscribe()
   }, [])
 
+
+  // Регистрация нового пользователя
+  // Создаёт аккаунт в Firebase Auth и документ в Firestore
   const register = async (email, password, name) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -53,6 +65,7 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // Вход в аккаунт
   const login = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password)
@@ -62,6 +75,7 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // выход из аккаунта
   const logout = async () => {
     try {
       await signOut(auth)
@@ -71,6 +85,8 @@ export function AuthProvider({ children }) {
     }
   }
 
+
+  // обновление данных пользователя в Firestore и в состоянии React
   const updateUser = async (updatedData) => {
     if (!user) return
     try {
@@ -81,18 +97,21 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // добавление фильма в список
   const addMovie = async (movie) => {
     if (!user) {
       alert('Войдите, чтобы добавить фильм')
       return
     }
 
+    // проверка, нет ли уже такого фильма
     const exists = user.movies.some(m => m.imdbID === movie.imdbID);
     if (exists) {
       alert('Этот фильм уже в вашем списке')
       return
     }
 
+    // создаём новый массив со старыми фильмами + новым
     const updatedMovies = [...user.movies, {
       imdbID: movie.imdbID,
       Title: movie.Title,
@@ -107,13 +126,15 @@ export function AuthProvider({ children }) {
     await updateUser({ movies: updatedMovies })
   }
 
+   // Удалить фильм из списка
   const removeMovie = async (imdbID) => {
     if (!user) return
 
     const updatedMovies = user.movies.filter(movie => movie.imdbID !== imdbID)
     await updateUser({ movies: updatedMovies })
-  };
+  }
 
+  // Изменить статус фильма (wishlist / watching / watched / dropped)
   const updateMovieStatus = async (imdbID, newStatus) => {
     if (!user) return
 
@@ -125,6 +146,7 @@ export function AuthProvider({ children }) {
     await updateUser({ movies: updatedMovies })
   }
 
+   // Изменить оценку фильма
   const updateMovieRating = async (imdbID, userRating) => {
   if (!user) return;
 
@@ -136,6 +158,7 @@ export function AuthProvider({ children }) {
     await updateUser({ movies: updatedMovies })
     }
 
+  // Изменить заметки к фильму
   const updateMovieNotes = async (imdbID, notes) => {
     if (!user) return;
 
@@ -156,6 +179,7 @@ export function AuthProvider({ children }) {
   )
 }
 
+// кастомный хук — обёртка над useContext(AuthContext)
 export function useAuth() {
   return useContext(AuthContext)
 }

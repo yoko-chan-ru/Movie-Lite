@@ -7,12 +7,19 @@ import { faCheck, faTimes, faClock, faPlus, faTrash } from '@fortawesome/free-so
 import styles from '../../styles/MovieSearch.module.css'
 
 function MovieSearch() {
+  // Что ввёл пользователь в поле поиска
   const [query, setQuery] = useState('')
+
+  // Найденные фильмы 
   const [movies, setMovies] = useState([])
+
   const [loading, setLoading] = useState(false)
+
+  // История последних поисковых запросов
   const [searchHistory, setSearchHistory] = useState([])
   const { user, addMovie, removeMovie } = useAuth()
 
+  // При первой загрузке компонента читаем историю из localStorage
   useEffect(() => {
     const saved = localStorage.getItem('searchHistory')
     if (saved) {
@@ -20,6 +27,7 @@ function MovieSearch() {
     }
   }, [])
 
+  // При загрузке страницы восстанавливаем последний запрос и результаты
   useEffect(() => {
     const savedQuery = sessionStorage.getItem('searchQuery')
     const savedMovies = sessionStorage.getItem('searchResults')
@@ -30,6 +38,7 @@ function MovieSearch() {
     }
   }, [])
 
+  // Каждый раз, когда меняется query или movies — сохраняем их в sessionStorage
   useEffect(() => {
     if (query) {
       sessionStorage.setItem('searchQuery', query)
@@ -43,6 +52,8 @@ function MovieSearch() {
     }
   }, [query, movies])
 
+
+  // сохранить запрос в историю
   const saveToHistory = (queryText) => {
     if (!queryText.trim()) return
     const updated = [queryText.trim(), ...searchHistory.filter(q => q !== queryText.trim())].slice(0, 10)
@@ -50,12 +61,14 @@ function MovieSearch() {
     localStorage.setItem('searchHistory', JSON.stringify(updated))
   }
 
+  // удалить запрос из истории
   const removeFromHistory = (queryToRemove) => {
     const updated = searchHistory.filter(q => q !== queryToRemove)
     setSearchHistory(updated)
     localStorage.setItem('searchHistory', JSON.stringify(updated))
   }
 
+  // поиск
   const handleSearch = async (e) => {
     e.preventDefault()
     if (!query.trim()) return
@@ -68,6 +81,7 @@ function MovieSearch() {
     setLoading(false)
   }
 
+  // поиск по клику на историю
   const handleHistoryClick = async (q) => {
     setQuery(q)
     saveToHistory(q)
@@ -77,6 +91,7 @@ function MovieSearch() {
     setLoading(false)
   }
 
+  // очистить поле ввода
   const handleClear = () => {
     setQuery('')
     setMovies([])
@@ -84,6 +99,7 @@ function MovieSearch() {
     sessionStorage.removeItem('searchResults')
   }
 
+  // есть ли фильм в списке пользователя
   const isMovieInList = (imdbID) => {
     if (!user || !user.movies) return false
     return user.movies.some(m => m.imdbID === imdbID)

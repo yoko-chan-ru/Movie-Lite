@@ -5,6 +5,9 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import styles from '../../styles/MovieCard.module.css'
 
 function MovieCard({ movie, localNotes, onNoteChange, onNoteBlur, onRemove, onStatusChange, onRatingChange }) {
+  
+  // Значение заметки: сначала проверяем локальное состояние (что печатает пользователь),
+  // если там ничего нет — берём из данных фильма
   const currentNote = localNotes[movie.imdbID] !== undefined
     ? localNotes[movie.imdbID]
     : (movie.notes || '')

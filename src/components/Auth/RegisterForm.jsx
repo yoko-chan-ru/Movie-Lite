@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import styles from '../../styles/Auth.module.css'
 
 function RegisterForm() {
+   // Имя, имэйл и пароль, введённые пользователем
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { register } = useAuth()

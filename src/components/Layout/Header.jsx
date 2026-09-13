@@ -7,10 +7,17 @@ import styles from '../../styles/Header.module.css'
 
 function Header() {
   const { user, logout } = useAuth()
+
+  // позволяет перейти на другой URL в коде 
   const navigate = useNavigate()
+
+  // открыто ли выпадающее меню
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  // Ссылка на DOM-элемент меню — нужна, чтобы понять, куда кликнул пользователь
   const menuRef = useRef(null)
 
+  // Обработчик выхода из аккаунта
   const handleLogout = async () => {
     try {
       await logout()
@@ -20,6 +27,7 @@ function Header() {
     }
   }
 
+   // Закрываем меню, если кликнули вне его
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -46,8 +54,7 @@ function Header() {
               <div className={styles.userMenu} ref={menuRef}>
                 <button
                   className={styles.userNameBtn}
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                >
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}>
                   <FontAwesomeIcon icon={faUser} className={styles.userIcon} />
                   <span className={styles.userName}>{user.name}</span>
                 </button>

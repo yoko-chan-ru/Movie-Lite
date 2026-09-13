@@ -8,10 +8,16 @@ import styles from '../styles/MovieDetailPage.module.css'
 function MovieDetailPage() {
   const { imdbID } = useParams()
   const navigate = useNavigate()
+
+  // Данные фильма (null, пока не загрузились)
   const [movie, setMovie] = useState(null)
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+
+  // useEffect: загружаем данные фильма при монтировании
+  // или когда меняется imdbID
   useEffect(() => {
     const fetchMovie = async () => {
       try {

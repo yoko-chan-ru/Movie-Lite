@@ -1,7 +1,8 @@
-
 const API_KEY = import.meta.env.VITE_OMDB_KEY
 const BASE_URL = 'https://www.omdbapi.com/'
 
+
+// Функция поиска фильмов по названию
 export const searchMovies = async (query) => {
   const response = await fetch(
     `${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(query)}`
@@ -15,6 +16,7 @@ export const searchMovies = async (query) => {
   return data.Search || []
 }
 
+// Функция получения деталей фильма по его imdbID
 export const getMovieDetails = async (imdbID) => {
   const response = await fetch(
     `${BASE_URL}?apikey=${API_KEY}&i=${imdbID}&plot=full`

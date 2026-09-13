@@ -9,25 +9,42 @@ import styles from '../styles/MyMoviesPage.module.css'
 
 function MyMoviesPage() {
   const { user, removeMovie, updateMovieStatus, updateMovieRating, updateMovieNotes } = useAuth()
+
+   // Локальные заметки (пока пользователь печатает — хранятся здесь, а не в Firestore)
   const [localNotes, setLocalNotes] = useState({})
+
+  // Режим отображения: 'list' (списком) или 'grouped' (по статусам)
   const [viewMode, setViewMode] = useState('list')
+
+  // Свёрнуты ли группы (по статусу)
   const [collapsed, setCollapsed] = useState({})
+
+   // Какая сортировка выбрана для каждой группы
   const [sortBy, setSortBy] = useState({})
+
+  // Сортировка для режима "Списком"
   const [globalSort, setGlobalSort] = useState('date')
+
+  // Текущая страница пагинации
   const [currentPage, setCurrentPage] = useState(1)
+
+  // Сколько фильмов показано в каждой группе 
   const [visibleCount, setVisibleCount] = useState({})
 
   const moviesPerPage = 10
+
 
   if (!user) return <p>Войдите, чтобы увидеть свои фильмы</p>
   if (!user.movies || user.movies.length === 0) {
     return <p>У вас пока нет фильмов. Добавьте их через поиск!</p>
   }
 
+  // Обновляем заметку в локальном состоянии 
   const handleNoteChange = (imdbID, value) => {
     setLocalNotes(prev => ({ ...prev, [imdbID]: value }))
   }
 
+  // Сохраняем заметку в Firestore (при уходе с поля)
   const handleNoteBlur = (imdbID) => {
     const note = localNotes[imdbID]
     if (note !== undefined) {
@@ -35,10 +52,12 @@ function MyMoviesPage() {
     }
   }
 
+  // Переключаем свёрнутость группы по статусу
   const toggleCollapse = (status) => {
     setCollapsed(prev => ({ ...prev, [status]: !prev[status] }))
   }
 
+   // Увеличиваем количество видимых фильмов в группе на 4
   const showMore = (status) => {
     setVisibleCount(prev => ({
       ...prev,
@@ -46,6 +65,7 @@ function MyMoviesPage() {
     }))
   }
 
+  // режим по статусам
   const renderGroupedView = () => {
     return Object.entries(STATUSES).map(([status, { label, icon }]) => {
       const moviesInGroup = user.movies.filter(m => m.status === status)
@@ -110,6 +130,7 @@ function MyMoviesPage() {
     })
   }
 
+  // режим списком
   const renderListView = () => {
     const sortedMovies = sortMovies(user.movies, globalSort)
     const totalMovies = sortedMovies.length
