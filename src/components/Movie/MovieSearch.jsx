@@ -131,7 +131,7 @@ function MovieSearch() {
         </button>
       </form>
 
-      {!query && searchHistory.length > 0 && (
+      {user && !query && searchHistory.length > 0 && (
         <div className={styles.historyContainer}>
           <div className={styles.historyHeader}>
             <span><FontAwesomeIcon icon={faClock} /> Недавние запросы:</span>
