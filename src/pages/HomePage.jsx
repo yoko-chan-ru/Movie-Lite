@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext'
 function HomePage() {
   const { user } = useAuth()
 
+  //throw new Error('Тестовая ошибка')
+  
   return (
     <div className="page">
       <h2> Добро пожаловать в Movie Lite!</h2>

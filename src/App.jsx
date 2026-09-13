@@ -6,10 +6,12 @@ import HomePage from './pages/HomePage'
 import MyMoviesPage from './pages/MyMoviesPage'
 import Header from './components/Layout/Header'
 import MovieDetailPage from './pages/MovieDetailPage'
+import ErrorBoundary from './components/ErrorBoundary'
 
 function App() {
   return (
     <AuthProvider>
+      <ErrorBoundary>
       <BrowserRouter>
       <div className="container"> 
           <Header />
@@ -22,6 +24,7 @@ function App() {
             </Routes>
       </div>
       </BrowserRouter>
+    </ErrorBoundary>
     </AuthProvider>
   )
 }
