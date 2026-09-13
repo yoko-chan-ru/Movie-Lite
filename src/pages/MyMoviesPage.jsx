@@ -120,7 +120,7 @@ function MyMoviesPage() {
 
               {hasMore && (
                 <button className={styles.showMoreBtn} onClick={() => showMore(status)}>
-                  Показать ещё ({sortedMovies.length - (visibleCount[status] || 5)})
+                  Показать ещё ({sortedMovies.length - (visibleCount[status] || 4)})
                 </button>
               )}
             </div>
